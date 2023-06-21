@@ -19,3 +19,10 @@
 
 # Go workspace file
 go.work
+
+1.txt
+2.txt
+cert.pem
+priv.pem
+cmd
+dynserver
