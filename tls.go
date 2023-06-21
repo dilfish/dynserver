@@ -23,6 +23,7 @@ func (h *HttpsHandler) Uploader(w http.ResponseWriter, r *http.Request) {
 
 func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("request is: ", r.RemoteAddr, "->", r.Host, r.RequestURI)
+	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
 	if r.Host != "ls.dev.ug" && r.Host != "ls4.dev.ug" {
 		// return
