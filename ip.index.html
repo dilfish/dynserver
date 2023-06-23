@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#0B4B59"/>
+
+    <title> 🐍IP Info</title>
+
+    <link href="https://dilfish.icu/302/bootstrap.css" rel="stylesheet">
+    <style>
+h1 {
+     word-wrap:break-word;
+ }
+</style>
+  </head>
+
+  <body>
+<h1 align="center">Client Headers Info</h1>
+
+      {{ range .}}
+  <main role="main" class="container">
+    <div class="jumbotron">
+        <h1>
+			{{ .Value }}
+	</h1>
+        <p class="lead">{{.Key }}</p>
+    </div>
+  </main>
+  {{ end }}
+
+
+
+   <script src="//dilfish.icu/302/jquery.js"></script>
+    <script src="//dilfish.icu/302/bootstrap.js"></script>
+  </body>
+</html>
