@@ -23,17 +23,21 @@ type IPInfo struct {
 func CFIPHandler(w http.ResponseWriter, r *http.Request) {
 	var headerList []string
 	var kvList []IPInfo
-	for k, _ := range w.Header() {
+	for k, _ := range r.Header {
 		headerList = append(headerList, k)
 	}
 	sort.Strings(headerList)
 	for _, hdr := range headerList {
 		var ii IPInfo
-		vv := strings.Join(w.Header()[hdr], ",")
+		vv := strings.Join(r.Header[hdr], ",")
 		ii.Key = hdr
 		ii.Value = vv
 		kvList = append(kvList, ii)
 	}
+	var ii IPInfo
+	ii.Key = "X-Remote-IP"
+	ii.Value = r.RemoteAddr
+	kvList = append(kvList, ii)
 	if r.Method != "GET" {
 		bt, _ := json.Marshal(kvList)
 		w.Write(bt)

@@ -44,6 +44,10 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.Msg(w, r)
 		return
 	}
+	if r.RequestURI == "/ip" {
+		CFIPHandler(w, r)
+		return
+	}
 	fs := http.FileServer(http.Dir("/root/go/src/dynserver"))
 	fs.ServeHTTP(w, r)
 }
