@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+var SniList []string
+
 type HttpsHandler struct {
 	u *dnet.UploaderService
 	C *MongoClient
@@ -25,8 +27,8 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("request is: ", r.RemoteAddr, "->", r.Host, r.RequestURI)
 	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
-	if r.Host != "ls.dev.ug" && r.Host != "ls4.dev.ug" {
-		// return
+	if !IsGoodSNI(r.Host) {
+		return
 	}
 	if strings.Index(r.RequestURI, "/memfile/") == 0 {
 		MemFileHandler(w, r)
@@ -50,4 +52,13 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	fs := http.FileServer(http.Dir("/root/go/src/dynserver"))
 	fs.ServeHTTP(w, r)
+}
+
+func IsGoodSNI(host string) bool {
+	for _, s := range SniList {
+		if s == host {
+			return true
+		}
+	}
+	return false
 }

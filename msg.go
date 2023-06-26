@@ -31,9 +31,13 @@ func (h *HttpsHandler) Msg(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		r.ParseForm()
 		msg := r.Form["message"]
-		message := "null message"
+		message := ""
 		if len(msg) > 0 {
 			message = msg[0]
+		}
+		if len(message) > 1000 || len(message) < 2 {
+			w.Write([]byte("too long or short"))
+			return
 		}
 		var m Msg
 		m.Id = primitive.NewObjectID()
