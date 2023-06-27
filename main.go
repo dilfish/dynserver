@@ -13,6 +13,7 @@ var FlagCert = flag.String("cert", "dev.ug.pem", "cert file path")
 var FlagKey = flag.String("key", "dev.ug.key.pem", "priv key file path")
 var FlagDomain = flag.String("domain", "ak.dev.ug", "domain name")
 var FlagSNI = flag.String("sni", "ls.dev.ug,ls4.dev.ug", "sni list")
+var FlagSame = flag.Bool("same", false, "same=https, false==302")
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
@@ -29,7 +30,6 @@ func main() {
 		panic("new mongo client error")
 	}
 
-	go Redirect()
 	var h HttpsHandler
 	h.C = client
 	h.u = dnet.NewUploadService(
@@ -38,6 +38,11 @@ func main() {
 		"https://"+domain+"/upload",
 		1024*1024*10,
 		time.Hour*24*30, 5)
+	if *FlagSame {
+		go SameAsHttps(&h)
+	} else {
+		go Redirect()
+	}
 	err := http.ListenAndServeTLS(":443", *FlagCert, *FlagKey, &h)
 	if err != nil {
 		log.Println("listen and serve tls error:", err)

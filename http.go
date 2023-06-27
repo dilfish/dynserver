@@ -16,3 +16,10 @@ func Redirect() {
 		panic("listen and serve http error: " + err.Error())
 	}
 }
+
+func SameAsHttps(h http.Handler) {
+	err := http.ListenAndServe(":80", h)
+	if err != nil {
+		panic("listen and serve http error:" + err.Error())
+	}
+}
