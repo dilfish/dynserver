@@ -27,6 +27,9 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("request is: ", r.RemoteAddr, "->", r.Host, r.RequestURI)
 	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
+	if r.ContentLength > MaxHTTPPayload {
+		return
+	}
 	isBlock := dnet.CheckBlocked(r)
 	if isBlock {
 		w.Write([]byte(dnet.BlockHTML))

@@ -15,6 +15,8 @@ var FlagDomain = flag.String("domain", "ak.dev.ug", "domain name")
 var FlagSNI = flag.String("sni", "ls.dev.ug,ls4.dev.ug", "sni list")
 var FlagSame = flag.Bool("same", false, "same=https, false==302")
 
+const MaxHTTPPayload = 1024 * 1024 * 10
+
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	flag.Parse()
@@ -36,7 +38,7 @@ func main() {
 		"https://"+domain+"/ugc/",
 		"/root/go/src/dynserver/ugc",
 		"https://"+domain+"/upload",
-		1024*1024*10,
+		MaxHTTPPayload,
 		time.Hour*24*30, 5)
 	if *FlagSame {
 		go SameAsHttps(&h)
