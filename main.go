@@ -13,7 +13,6 @@ var FlagCert = flag.String("cert", "dev.ug.pem", "cert file path")
 var FlagKey = flag.String("key", "dev.ug.key.pem", "priv key file path")
 var FlagDomain = flag.String("domain", "ak.dev.ug", "domain name")
 var FlagSNI = flag.String("sni", "ls.dev.ug,ls4.dev.ug", "sni list")
-var FlagSame = flag.Bool("same", false, "same=https, false==302")
 
 const MaxHTTPPayload = 1024 * 1024 * 10
 
@@ -40,11 +39,7 @@ func main() {
 		"https://"+domain+"/upload",
 		MaxHTTPPayload,
 		time.Hour*24*30, 5)
-	if *FlagSame {
-		go SameAsHttps(&h)
-	} else {
-		go Redirect()
-	}
+	go Redirect(&h)
 	err := http.ListenAndServeTLS(":443", *FlagCert, *FlagKey, &h)
 	if err != nil {
 		log.Println("listen and serve tls error:", err)
