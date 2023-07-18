@@ -35,6 +35,11 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(dnet.BlockHTML))
 		return
 	}
+    proxy := GetProxyPort(r.Host)
+    if proxy != nil {
+        proxy.ServeHTTP(w, r)
+        return
+    }
 	if !IsGoodSNI(r.Host) {
 		return
 	}

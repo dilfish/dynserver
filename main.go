@@ -13,12 +13,20 @@ var FlagCert = flag.String("cert", "dev.ug.pem", "cert file path")
 var FlagKey = flag.String("key", "dev.ug.key.pem", "priv key file path")
 var FlagDomain = flag.String("domain", "ak.dev.ug", "domain name")
 var FlagSNI = flag.String("sni", "ls.dev.ug,ls4.dev.ug", "sni list")
+var FlagProxyPort = flag.String("pp", "", "proxy port list")
+var FlagProxyDomain = flag.String("pd", "", "proxy domain list")
 
 const MaxHTTPPayload = 1024 * 1024 * 10
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	flag.Parse()
+
+    err := ParseProxy()
+    if err != nil {
+        log.Println("parse proxy error:", err)
+        return
+    }
 
 	domain := *FlagDomain
 	SniList = strings.Split(*FlagSNI, ",")
@@ -40,7 +48,7 @@ func main() {
 		MaxHTTPPayload,
 		time.Hour*24*30, 5)
 	go Redirect(&h)
-	err := http.ListenAndServeTLS(":443", *FlagCert, *FlagKey, &h)
+	err = http.ListenAndServeTLS(":1443", *FlagCert, *FlagKey, &h)
 	if err != nil {
 		log.Println("listen and serve tls error:", err)
 	}

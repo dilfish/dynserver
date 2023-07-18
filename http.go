@@ -24,7 +24,7 @@ func (rd *RedirectHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func Redirect(h http.Handler) {
 	var rd RedirectHandler
 	rd.Same = h
-	err := http.ListenAndServe(":80", &rd)
+	err := http.ListenAndServe(":1080", &rd)
 	if err != nil {
 		panic("listen and serve http error: " + err.Error())
 	}
