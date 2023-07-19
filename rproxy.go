@@ -14,12 +14,16 @@ var ProxyPortList []string
 var ProxyList []*httputil.ReverseProxy
 
 func ParseProxy() error {
+    if *FlagProxyDomain == "" && *FlagProxyPort == "" {
+        return nil
+    }
     domainList := strings.Split(*FlagProxyDomain, ",")
     portList := strings.Split(*FlagProxyPort, ",")
     if len(domainList) != len(portList) {
         log.Println("reverse port list does not match domain list", *FlagProxyDomain, *FlagProxyPort)
         return errors.New("reverse port does not match domain list")
     }
+    log.Println("domain and port list are:", domainList, portList)
     for _, p := range portList {
         _, err := strconv.ParseUint(p, 10, 32)
         if err != nil {
