@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	dnet "github.com/dilfish/tools/net"
+	"github.com/prometheus/client_golang/prometheus"
 	"log"
 	"net/http"
 	"strings"
@@ -22,11 +23,11 @@ func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	flag.Parse()
 
-    err := ParseProxy()
-    if err != nil {
-        log.Println("parse proxy error:", err)
-        return
-    }
+	err := ParseProxy()
+	if err != nil {
+		log.Println("parse proxy error:", err)
+		return
+	}
 
 	domain := *FlagDomain
 	SniList = strings.Split(*FlagSNI, ",")
@@ -48,7 +49,8 @@ func main() {
 		MaxHTTPPayload,
 		time.Hour*24*30, 5)
 	go Redirect(&h)
-	err = http.ListenAndServeTLS(":1443", *FlagCert, *FlagKey, &h)
+	prometheus.MustRegister(badDomainNameCounter)
+	err = http.ListenAndServeTLS(":443", *FlagCert, *FlagKey, &h)
 	if err != nil {
 		log.Println("listen and serve tls error:", err)
 	}

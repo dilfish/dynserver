@@ -2,10 +2,13 @@ package main
 
 import (
 	dnet "github.com/dilfish/tools/net"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 )
 
 var SniList []string
@@ -24,6 +27,12 @@ func (h *HttpsHandler) Uploader(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
+	defer func() {
+		elaps := time.Now().Sub(start)
+		ms := elaps.Milliseconds()
+		requestDurationMs.Observe(float64(ms))
+	}()
 	log.Println("request is: ", r.RemoteAddr, "->", r.Host, r.RequestURI)
 	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
@@ -35,12 +44,13 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(dnet.BlockHTML))
 		return
 	}
-    proxy := GetProxyPort(r.Host)
-    if proxy != nil {
-        proxy.ServeHTTP(w, r)
-        return
-    }
+	proxy := GetProxyPort(r.Host)
+	if proxy != nil {
+		proxy.ServeHTTP(w, r)
+		return
+	}
 	if !IsGoodSNI(r.Host) {
+		badDomainNameCounter.Inc()
 		return
 	}
 	if strings.Index(r.RequestURI, "/memfile/") == 0 {
@@ -63,8 +73,15 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		CFIPHandler(w, r)
 		return
 	}
+	if r.RequestURI == "/metrics" {
+		promhttp.Handler().ServeHTTP(w, r)
+		return
+	}
 	fs := http.FileServer(http.Dir("/root/go/src/dynserver"))
 	fs.ServeHTTP(w, r)
+	fileSize := w.Header().Get("Content-Length")
+	numSize, _ := strconv.ParseUint(fileSize, 10, 64)
+	fileSizeServedBytes.Set(float64(numSize))
 }
 
 func IsGoodSNI(host string) bool {
