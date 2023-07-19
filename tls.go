@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -30,8 +29,8 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	defer func() {
 		elaps := time.Now().Sub(start)
-		ms := elaps.Milliseconds()
-		requestDurationMs.Observe(float64(ms))
+		us := elaps.Microseconds()
+		requestDurationUs.Observe(float64(us))
 	}()
 	log.Println("request is: ", r.RemoteAddr, "->", r.Host, r.RequestURI)
 	log.Println("content length is:", r.ContentLength)
@@ -77,11 +76,18 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		promhttp.Handler().ServeHTTP(w, r)
 		return
 	}
-	fs := http.FileServer(http.Dir("/root/go/src/dynserver"))
+	log.Println("serve file:", r.RequestURI)
+	path := "/root/go/src/dynserver"
+	d := http.Dir(path)
+	f, err := d.Open(r.RequestURI)
+	if err != nil {
+		log.Println("open file error:", r.RequestURI, err)
+	} else {
+		fi, _ := f.Stat()
+		fileSizeServedBytes.Set(float64(fi.Size()))
+	}
+	fs := http.FileServer(d)
 	fs.ServeHTTP(w, r)
-	fileSize := w.Header().Get("Content-Length")
-	numSize, _ := strconv.ParseUint(fileSize, 10, 64)
-	fileSizeServedBytes.Set(float64(numSize))
 }
 
 func IsGoodSNI(host string) bool {

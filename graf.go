@@ -11,10 +11,10 @@ var badDomainNameCounter = prometheus.NewCounter(
 	},
 )
 
-var requestDurationMs = prometheus.NewHistogram(
+var requestDurationUs = prometheus.NewHistogram(
 	prometheus.HistogramOpts{
-		Name: "request_duration_ms",
-		Help: "milliseconds a request cost",
+		Name: "request_duration_us",
+		Help: "microseconds a request cost",
 	},
 )
 

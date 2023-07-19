@@ -50,6 +50,8 @@ func main() {
 		time.Hour*24*30, 5)
 	go Redirect(&h)
 	prometheus.MustRegister(badDomainNameCounter)
+	prometheus.MustRegister(requestDurationUs)
+	prometheus.MustRegister(fileSizeServedBytes)
 	err = http.ListenAndServeTLS(":443", *FlagCert, *FlagKey, &h)
 	if err != nil {
 		log.Println("listen and serve tls error:", err)
