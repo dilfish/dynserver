@@ -16,6 +16,7 @@ var FlagDomain = flag.String("domain", "ak.dev.ug", "domain name")
 var FlagSNI = flag.String("sni", "ls.dev.ug,ls4.dev.ug", "sni list")
 var FlagProxyPort = flag.String("pp", "", "proxy port list")
 var FlagProxyDomain = flag.String("pd", "", "proxy domain list")
+var FlagTestMode = flag.Bool("t", false, "test mode")
 
 const MaxHTTPPayload = 1024 * 1024 * 10
 
@@ -52,7 +53,11 @@ func main() {
 	prometheus.MustRegister(badDomainNameCounter)
 	prometheus.MustRegister(requestDurationUs)
 	prometheus.MustRegister(fileSizeServedBytes)
-	err = http.ListenAndServeTLS(":443", *FlagCert, *FlagKey, &h)
+	addr := ":443"
+	if *FlagTestMode {
+		addr = ":1443"
+	}
+	err = http.ListenAndServeTLS(addr, *FlagCert, *FlagKey, &h)
 	if err != nil {
 		log.Println("listen and serve tls error:", err)
 	}
