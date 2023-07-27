@@ -32,7 +32,7 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		us := elaps.Microseconds()
 		requestDurationUs.Observe(float64(us))
 	}()
-	log.Println("request is: ", r.RemoteAddr, "->", r.Host, r.RequestURI)
+	log.Println("request is: ", r.Method, r.RemoteAddr, "->", r.Host, r.RequestURI)
 	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
 	if r.ContentLength > MaxHTTPPayload {
