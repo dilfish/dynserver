@@ -35,7 +35,7 @@ func (h *HttpsHandler) Msg(w http.ResponseWriter, r *http.Request) {
 		if len(msg) > 0 {
 			message = msg[0]
 		}
-		if len(message) > 1000 || len(message) < 2 {
+		if len(message) > 500000 || len(message) < 2 {
 			w.Write([]byte("too long or short"))
 			return
 		}
