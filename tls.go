@@ -36,19 +36,23 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
 	if r.ContentLength > MaxHTTPPayload {
+		log.Println("bad content length:", r.ContentLength)
 		return
 	}
 	isBlock := dnet.CheckBlocked(r)
 	if isBlock {
+		log.Println("is blocked by wx:", r.Host)
 		w.Write([]byte(dnet.BlockHTML))
 		return
 	}
 	proxy := GetProxyPort(r.Host)
 	if proxy != nil {
+		log.Println("using proxy:", r.Host)
 		proxy.ServeHTTP(w, r)
 		return
 	}
 	if !IsGoodSNI(r.Host) {
+		log.Println("bad domain name:", r.Host)
 		badDomainNameCounter.Inc()
 		return
 	}
@@ -60,12 +64,17 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.Uploader(w, r)
 		return
 	}
-	if strings.Index(r.RequestURI, "/t/") == 0 {
-		h.Msg(w, r)
+	if r.RequestURI == "/t/list" {
+		h.MsgList(w, r)
 		return
 	}
 	if r.RequestURI == "/t" {
-		h.Msg(w, r)
+		log.Println("create msg")
+		h.CreateMsg(w, r)
+		return
+	}
+	if strings.Index(r.RequestURI, "/t/list/") == 0 {
+		h.MsgShow(w, r)
 		return
 	}
 	if r.RequestURI == "/ip" {
@@ -78,6 +87,9 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("serve file:", r.RequestURI)
 	path := "/root/go/src/dynserver"
+	if *FlagTestMode {
+		path = "/Users/dilfish/go/src/github.com/dilfish/dynserver"
+	}
 	d := http.Dir(path)
 	f, err := d.Open(r.RequestURI)
 	if err != nil {

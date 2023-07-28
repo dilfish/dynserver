@@ -1,33 +1,73 @@
 package main
 
 import (
-	"encoding/json"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 	"net/http"
 	"time"
 )
 
 type Msg struct {
-	Id       primitive.ObjectID `json:"_id" bson:"_id"`
-	Msg      string             `json:"msg" bson:"msg"`
-	CreateAt time.Time          `json:"createAt" bson:"createAt"`
+	Id       string    `json:"_id" bson:"_id"`
+	Msg      string    `json:"msg" bson:"msg"`
+	CreateAt time.Time `json:"createAt" bson:"createAt"`
 }
 
-func (h *HttpsHandler) Msg(w http.ResponseWriter, r *http.Request) {
-	if r.RequestURI == "/t/list" {
-		var list []Msg
-		err := h.C.Find(bson.M{}, &list)
-		if err != nil {
-			w.Write([]byte(err.Error()))
-			return
-		}
-		for _, m := range list {
-			bt, _ := json.Marshal(m)
-			w.Write([]byte("<h1>" + string(bt) + "</h1>"))
-		}
+// MsgList return list of message info
+// get only
+func (h *HttpsHandler) MsgList(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		log.Println("bad method for msg list:", r.Method)
+		w.Write([]byte("bad method for msg list"))
 		return
 	}
+	var list []Msg
+	cond := bson.M{}
+	err := h.C.Find(cond, &list)
+	if err != nil && err != mongo.ErrNilDocument {
+		log.Println("find msg error:", err)
+		w.Write([]byte("find msg error: " + err.Error()))
+		return
+	}
+	ht := "<html><head><title>Msg List</title></head><body><h1><div align=\"center\">"
+	if len(list) == 0 {
+		ht = ht + "Empty List"
+	}
+	for _, l := range list {
+		ht = ht + "<a href=\"/t/list/" + l.Id + "\"> Info </a>, " + l.CreateAt.String() + "<br>"
+	}
+	ht = ht + "</div></h1></body></html>"
+	w.Write([]byte(ht))
+}
+
+// MsgShow return single message
+// get only
+func (h *HttpsHandler) MsgShow(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		log.Println("bad method for msg show:", r.Method)
+		w.Write([]byte("bad method for msg show"))
+		return
+	}
+	msgId := r.RequestURI[len("/t/list/"):]
+	log.Println("msg show id:", msgId)
+	cond := bson.M{
+		"_id": msgId,
+	}
+	var msg []Msg
+	err := h.C.Find(cond, &msg)
+	if err != nil || len(msg) <= 0 {
+		log.Println("msg id:", msgId, err)
+		w.Write([]byte("no such msg id:" + msgId))
+		return
+	}
+	w.Write([]byte("<html><head><title>" + msg[0].Id + "</title></head><body><h1>" + msg[0].Msg + "</h1></body></html>"))
+}
+
+// CreateMsg get-> message input page
+// post-> new message
+func (h *HttpsHandler) CreateMsg(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		r.ParseForm()
 		msg := r.Form["message"]
@@ -40,7 +80,7 @@ func (h *HttpsHandler) Msg(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		var m Msg
-		m.Id = primitive.NewObjectID()
+		m.Id = primitive.NewObjectID().Hex()
 		m.CreateAt = time.Now()
 		m.Msg = message
 		err := h.C.Insert(m)
@@ -51,6 +91,8 @@ func (h *HttpsHandler) Msg(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	w.Write([]byte(MessagePage))
+	log.Println("get /t")
+	a, b := w.Write([]byte(MessagePage))
+	log.Println("write dong:", a, b)
 	return
 }

@@ -55,7 +55,7 @@ func main() {
 	prometheus.MustRegister(fileSizeServedBytes)
 	addr := ":443"
 	if *FlagTestMode {
-		addr = ":1443"
+		addr = ":11443"
 	}
 	err = http.ListenAndServeTLS(addr, *FlagCert, *FlagKey, &h)
 	if err != nil {

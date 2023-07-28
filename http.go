@@ -26,7 +26,7 @@ func Redirect(h http.Handler) {
 	rd.Same = h
 	addr := ":80"
 	if *FlagTestMode {
-		addr = ":1080"
+		addr = ":11080"
 	}
 	err := http.ListenAndServe(addr, &rd)
 	if err != nil {
