@@ -26,6 +26,7 @@ func (h *HttpsHandler) Uploader(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("X-Server", "iPhone Xs")
 	start := time.Now()
 	defer func() {
 		elaps := time.Now().Sub(start)

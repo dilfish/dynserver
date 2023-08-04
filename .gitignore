@@ -22,8 +22,8 @@ go.work
 
 1.txt
 2.txt
-cert.pem
-priv.pem
+dev.ug.key.pem
+dev.ug.pem
 cmd
 dynserver
 .idea/

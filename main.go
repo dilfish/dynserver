@@ -2,10 +2,12 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	dnet "github.com/dilfish/tools/net"
 	"github.com/prometheus/client_golang/prometheus"
 	"log"
 	"net/http"
+	"runtime/debug"
 	"strings"
 	"time"
 )
@@ -17,12 +19,25 @@ var FlagSNI = flag.String("sni", "ls.dev.ug,ls4.dev.ug", "sni list")
 var FlagProxyPort = flag.String("pp", "", "proxy port list")
 var FlagProxyDomain = flag.String("pd", "", "proxy domain list")
 var FlagTestMode = flag.Bool("t", false, "test mode")
+var FlagV = flag.Bool("v", false, "print version info")
 
 const MaxHTTPPayload = 1024 * 1024 * 30
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	flag.Parse()
+
+	if *FlagV {
+		bi, ok := debug.ReadBuildInfo()
+		if !ok {
+			fmt.Println("no build info")
+			return
+		}
+		for _, setting := range bi.Settings {
+			fmt.Println(setting.Key, setting.Value)
+		}
+		return
+	}
 
 	err := ParseProxy()
 	if err != nil {

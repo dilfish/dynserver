@@ -87,7 +87,8 @@ func (h *HttpsHandler) CreateMsg(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.Write([]byte(err.Error()))
 		} else {
-			w.Write([]byte("ok"))
+			http.Redirect(w, r, "/t/list/"+m.Id, 302)
+			return
 		}
 		return
 	}
