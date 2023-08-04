@@ -94,6 +94,6 @@ func (h *HttpsHandler) CreateMsg(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("get /t")
 	a, b := w.Write([]byte(MessagePage))
-	log.Println("write dong:", a, b)
+	log.Println("write done:", a, b)
 	return
 }

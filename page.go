@@ -8,19 +8,39 @@ var MessagePage = `
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="stylesheet" href="bulma.css">
+
 
     <title>
-input message
+        输入内容
 </title>
 
   </head>
   <body>
 
-  <form action="/t" name="confirmationForm" method="post">
-    <textarea id="message" class="text" cols="40" rows ="20" name="message"></textarea>
 
-   <input type="submit" value="send" class="submitButton">
-</form>
+<div class="columns">
+  <div class="column is-full">
+<article class="message">
+  <div class="message-body">
+      你可以输入任意内容
+  </div>
+</article>
+  </div>
+</div>
+
+
+<div class="columns is-mobile">
+  <div class="column is-three-fifths is-offset-one-fifth">
+    <textarea class="textarea" placeholder="例如：我要记的网址是 https://dev.ug" name="message"></textarea>
+
+  <form action="/t" name="confirmationForm" method="post" align="center">
+   <button class="button is-primary" value="send">提交</button>
+ </form>
+ </div>
+
+
+</div>
 
 
   </body>

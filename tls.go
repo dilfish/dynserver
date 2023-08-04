@@ -70,7 +70,6 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.RequestURI == "/t" {
-		log.Println("create msg")
 		h.CreateMsg(w, r)
 		return
 	}
