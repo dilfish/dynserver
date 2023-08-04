@@ -76,6 +76,7 @@ func (h *HttpsHandler) CreateMsg(w http.ResponseWriter, r *http.Request) {
 			message = msg[0]
 		}
 		if len(message) > 500000 || len(message) < 2 {
+			log.Println("empty msg form is:", r.Form)
 			w.Write([]byte("too long or short"))
 			return
 		}
