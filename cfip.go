@@ -37,7 +37,10 @@ func CFIPHandler(w http.ResponseWriter, r *http.Request) {
 	var ii IPInfo
 	ii.Key = "X-Remote-IP"
 	ii.Value = r.RemoteAddr
-	kvList = append(kvList, ii)
+	kvList = append([]IPInfo{ii}, kvList...)
+	ii.Key = "X-Server"
+	ii.Value = "iPhone 8 Plus"
+	kvList = append([]IPInfo{ii}, kvList...)
 	if r.Method != "GET" {
 		bt, _ := json.Marshal(kvList)
 		w.Write(bt)
