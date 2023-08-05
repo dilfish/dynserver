@@ -103,6 +103,10 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func IsGoodSNI(host string) bool {
+	h, _, err := net.SplitHostPort(host)
+	if err == nil {
+		host = h
+	}
 	for _, s := range SniList {
 		if s == host {
 			return true
