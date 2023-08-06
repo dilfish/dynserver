@@ -62,7 +62,7 @@ func (h *HttpsHandler) MsgShow(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("no such msg id:" + msgId))
 		return
 	}
-	w.Write([]byte("<html><head><title>" + msg[0].Id + "</title></head><body><h1>" + msg[0].Msg + "</h1></body></html>"))
+	w.Write([]byte(msg[0].Msg))
 }
 
 // CreateMsg get-> message input page
