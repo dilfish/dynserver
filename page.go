@@ -31,7 +31,7 @@ var MessagePage = `
 
 
 <div class="columns is-mobile">
-  <div class="column is-three-fifths is-offset-one-fifth">
+  <div class="column is-10 is-offset-1">
 
   <form action="/t" name="confirmationForm" method="post" align="center">
    <textarea class="textarea" placeholder="例如：我要记的网址是 https://dev.ug" name="message"></textarea>
