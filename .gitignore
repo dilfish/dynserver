@@ -27,7 +27,6 @@ dev.ug.pem
 cmd
 dynserver
 .idea/
-index.html
 cert.pem
 dl/
 p/
