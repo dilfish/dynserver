@@ -66,7 +66,7 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.Uploader(w, r)
 		return
 	}
-	if r.RequestURI == "/t/list" {
+	if r.RequestURI == "/t/list" || r.RequestURI == "/t/list/" {
 		h.MsgList(w, r)
 		return
 	}
