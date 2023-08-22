@@ -63,7 +63,7 @@ func main() {
 		"/root/go/src/dynserver/ugc",
 		"https://"+domain+"/upload",
 		MaxHTTPPayload,
-		time.Hour*24*30, 5)
+		time.Hour*24*365*3, 5)
 	go Redirect(&h)
 	prometheus.MustRegister(badDomainNameCounter)
 	prometheus.MustRegister(requestDurationUs)
