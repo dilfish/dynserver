@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -27,13 +28,13 @@ func (h *HttpsHandler) Uploader(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("X-Server", "iPhone Xs")
 	start := time.Now()
 	defer func() {
 		elaps := time.Now().Sub(start)
 		us := elaps.Microseconds()
 		requestDurationUs.Observe(float64(us))
 	}()
+	w.Header().Set("X-Server", "iPhone Xs")
 	log.Println("request is: ", r.Method, r.RemoteAddr, "->", r.Host, r.RequestURI)
 	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
@@ -41,6 +42,13 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Println("bad content length:", r.ContentLength)
 		return
 	}
+	parsedUrl, err := url.ParseRequestURI(r.RequestURI)
+	if err != nil {
+		log.Println("bad url:", r.RequestURI, err)
+		return
+	}
+	r.RequestURI = parsedUrl.Path
+
 	isBlock := dnet.CheckBlocked(r)
 	if isBlock {
 		log.Println("is blocked by wx:", r.Host)
