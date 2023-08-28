@@ -4,6 +4,8 @@ github.com/cespare/xxhash/v2 v2.2.0 h1:DC2CZ1Ep5Y4k3ZQ899DldepgrayRUGE6BBZ/cd9Cj
 github.com/cespare/xxhash/v2 v2.2.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/dilfish/telegram-bot-api-up v1.0.6 h1:JfVrNeUbXQQc+6upgoL+u+xzYXhmN+DVs4poBQy0lc4=
+github.com/dilfish/telegram-bot-api-up v1.0.6/go.mod h1:KoGdaOAr9+VhvOQA6Xj5h+LJsSMNx7v9UYx5rw+p1lI=
 github.com/dilfish/tools/io v1.0.15 h1:fBHzYK1G76YszDtqxt5hTBWeLnhfEya+Psz6aCbRmtA=
 github.com/dilfish/tools/io v1.0.15/go.mod h1:SpecDz637Xw0WhjmeL+MyTBkg07wFvVwYxO1+MWZyoI=
 github.com/dilfish/tools/net v1.0.25 h1:Ejf1spuDVQv8tY7EiX4udtmR2JCggeDWzAjlCAegN/4=

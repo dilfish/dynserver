@@ -20,12 +20,17 @@ var FlagProxyPort = flag.String("pp", "", "proxy port list")
 var FlagProxyDomain = flag.String("pd", "", "proxy domain list")
 var FlagTestMode = flag.Bool("t", false, "test mode")
 var FlagV = flag.Bool("v", false, "print version info")
+var FlagT = flag.String("te", "", "telegram file folder")
 
 const MaxHTTPPayload = 1024 * 1024 * 30
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	flag.Parse()
+
+	if *FlagT != "" {
+		go Telegram(*FlagT)
+	}
 
 	if *FlagV {
 		bi, ok := debug.ReadBuildInfo()
