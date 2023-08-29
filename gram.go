@@ -47,11 +47,11 @@ func getFileName(name string) string {
 	return name
 }
 
-func DownFile(b *tgbotapi.BotAPI, u tgbotapi.Update, path string) (string, error) {
-	uri := findUrl(b, u)
+func DownFile(b *tgbotapi.BotAPI, u tgbotapi.Update, path string) (string, int, error) {
+	uri, fileSize := findUrl(b, u)
 	if uri == "" {
 		log.Println("could not find url:", u.Message)
-		return "", errors.New("could not get uri")
+		return "", 0, errors.New("could not get uri")
 	}
 	log.Println("find url:", uri)
 	fn := getFileName(uri)
@@ -59,58 +59,68 @@ func DownFile(b *tgbotapi.BotAPI, u tgbotapi.Update, path string) (string, error
 	err := Down(uri, path+"/"+fn)
 	if err != nil {
 		log.Println("down file error:", uri, err)
-		return "", err
+		return "", 0, err
 	}
-	return fn, nil
+	return fn, fileSize, nil
 }
 
 // findUrl got the biggest one
-func findUrl(b *tgbotapi.BotAPI, u tgbotapi.Update) string {
+func findUrl(b *tgbotapi.BotAPI, u tgbotapi.Update) (string, int) {
 	// not message
 	if u.Message == nil {
 		log.Println("empty message", "error", errors.New("empty message"))
-		return ""
+		return "", 0
 	}
 	if len(u.Message.Photo) == 0 && u.Message.Document == nil {
 		log.Println("no message photo", "error", errors.New("no photo"))
-		return ""
+		return "", 0
 	}
 	doc := u.Message.Document
 	if doc != nil {
 		docu, err := b.GetFileDirectURL(doc.FileID)
 		if err != nil {
-			log.Println("inner error:", err)
-			return ""
+			log.Println("get file direct url error:", doc.FileID, err)
+			return "", 0
 		}
-		return docu
+		return docu, doc.FileSize
+	}
+
+	video := u.Message.Video
+	if video != nil {
+		vidu, err := b.GetFileDirectURL(video.FileID)
+		if err != nil {
+			log.Println("get video file error:", video.FileID, err)
+		}
+		return vidu, video.FileSize
 	}
 
 	ps := u.Message.Photo
 	// not photo
 	if len(ps) == 0 {
 		log.Println("not photo", "error", errors.New("not photo"))
-		return ""
+		return "", 0
 	}
 	max := 0
 	fileUrl := ""
 	for _, p := range ps {
 		if p.FileSize > max {
 			fileUrl = p.FileID
+			max = p.FileSize
 		}
 	}
 	fileUrl, err := b.GetFileDirectURL(fileUrl)
 	if err != nil {
-		log.Println("get url error:", "error", err, "file url", fileUrl)
-		return ""
+		log.Println("get url error, file url", fileUrl, err)
+		return "", 0
 	}
-	return fileUrl
+	return fileUrl, max
 }
 
 // InitTelegram create a bot for using
 func InitTelegram() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel, error) {
 	bot, err := tgbotapi.NewBotAPI(Token)
 	if err != nil {
-		log.Println("new bot", "error", err, "token", Token)
+		log.Println("new bot error", Token, err)
 		return nil, nil, err
 	}
 	log.Println("Auth on account", "user name", bot.Self.UserName)
@@ -122,6 +132,7 @@ func InitTelegram() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel, error) {
 type ReplyStruct struct {
 	Now      time.Time `json:"now"`
 	FileName string    `json:"fileName"`
+	FileSize int       `json:"fileSize"`
 	Error    string    `json:"error"`
 }
 
@@ -132,16 +143,17 @@ func HandleUpdate(id int64, path string, u tgbotapi.Update, bot *tgbotapi.BotAPI
 	log.Println("telegram message info", u.Message.From.UserName, u.Message.Text)
 	var reply ReplyStruct
 	reply.Now = time.Now()
-	if u.Message.Document != nil || len(u.Message.Photo) > 0 {
-		fn, err := DownFile(bot, u, path)
+	if u.Message.Document != nil || len(u.Message.Photo) > 0 || u.Message.Video != nil {
+		fn, fileSize, err := DownFile(bot, u, path)
 		if err != nil {
 			log.Println("download file error:", err)
 			reply.Error = err.Error()
 		} else {
 			reply.FileName = fn
+			reply.FileSize = fileSize
 		}
 	} else {
-		reply.Error = "does not support thie message type"
+		reply.Error = "does not support this message type"
 	}
 	bt, _ := json.Marshal(reply)
 	msg := tgbotapi.NewMessage(id, string(bt))
