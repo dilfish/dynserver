@@ -8,7 +8,7 @@ var MessagePage = `
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" href="bulma.css">
+    <link rel="stylesheet" href="https://cdn.871116.xyz/302/bulma.css">
 
 
     <title>

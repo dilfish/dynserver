@@ -71,7 +71,7 @@ func findUrl(b *tgbotapi.BotAPI, u tgbotapi.Update) (string, int) {
 		log.Println("empty message", "error", errors.New("empty message"))
 		return "", 0
 	}
-	if len(u.Message.Photo) == 0 && u.Message.Document == nil {
+	if len(u.Message.Photo) == 0 && u.Message.Document == nil && u.Message.Video == nil {
 		log.Println("no message photo", "error", errors.New("no photo"))
 		return "", 0
 	}
