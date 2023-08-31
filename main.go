@@ -20,7 +20,8 @@ var FlagProxyPort = flag.String("pp", "", "proxy port list")
 var FlagProxyDomain = flag.String("pd", "", "proxy domain list")
 var FlagTestMode = flag.Bool("t", false, "test mode")
 var FlagV = flag.Bool("v", false, "print version info")
-var FlagT = flag.String("te", "", "telegram file folder")
+var FlagT = flag.String("td", "", "telegram file folder")
+var FlagTB = flag.String("tb", "", "telegram base url")
 
 const MaxHTTPPayload = 1024 * 1024 * 30
 

@@ -149,7 +149,7 @@ func HandleUpdate(id int64, path string, u tgbotapi.Update, bot *tgbotapi.BotAPI
 			log.Println("download file error:", err)
 			reply.Error = err.Error()
 		} else {
-			reply.FileName = fn
+			reply.FileName = *FlagTB + fn
 			reply.FileSize = fileSize
 		}
 	} else {
