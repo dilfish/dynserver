@@ -24,13 +24,15 @@ var FlagT = flag.String("td", "", "telegram file folder")
 var FlagTB = flag.String("tb", "", "telegram base url")
 
 const MaxHTTPPayload = 1024 * 1024 * 30
+const TgToken = "1153923115:AAHUig2LQfApIF_Q-v5fn_fKgkCYhI15Flc"
+const TgFSToken = "6676857975:AAHkSi5n0ywJPWXu8HDvet1_u5PJtDvRAnU"
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	flag.Parse()
 
 	if *FlagT != "" {
-		go Telegram(*FlagT)
+		go Telegram(*FlagT, TgToken)
 	}
 
 	if *FlagV {

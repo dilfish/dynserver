@@ -16,6 +16,7 @@ import (
 )
 
 const Token = "1153923115:AAHUig2LQfApIF_Q-v5fn_fKgkCYhI15Flc"
+const FSToken = "6676857975:AAHkSi5n0ywJPWXu8HDvet1_u5PJtDvRAnU"
 
 func Down(u, path string) error {
 	file, err := os.Create(path)
@@ -117,8 +118,8 @@ func findUrl(b *tgbotapi.BotAPI, u tgbotapi.Update) (string, int) {
 }
 
 // InitTelegram create a bot for using
-func InitTelegram() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel, error) {
-	bot, err := tgbotapi.NewBotAPI(Token)
+func InitTelegram(token string) (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel, error) {
+	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Println("new bot error", Token, err)
 		return nil, nil, err
@@ -139,7 +140,7 @@ type ReplyStruct struct {
 // HandleUpdate handles two types of message
 // when it is a command, we send them pictures
 // when not, we return the text back
-func HandleUpdate(id int64, path string, u tgbotapi.Update, bot *tgbotapi.BotAPI, fileList []string) tgbotapi.Chattable {
+func HandleUpdate(id int64, path string, u tgbotapi.Update, bot *tgbotapi.BotAPI) tgbotapi.Chattable {
 	log.Println("telegram message info", u.Message.From.UserName, u.Message.Text)
 	var reply ReplyStruct
 	reply.Now = time.Now()
@@ -161,9 +162,9 @@ func HandleUpdate(id int64, path string, u tgbotapi.Update, bot *tgbotapi.BotAPI
 }
 
 // Telegram runs a robot
-func Telegram(path string) {
+func Telegram(path, token string) {
 	// no need to lock
-	bot, updates, err := InitTelegram()
+	bot, updates, err := InitTelegram(token)
 	if err != nil {
 		log.Println("init telegram", "error", err)
 		return
@@ -176,7 +177,7 @@ func Telegram(path string) {
 			log.Println("update is:", update)
 			continue
 		}
-		msg := HandleUpdate(update.Message.Chat.ID, path, update, bot, nil)
+		msg := HandleUpdate(update.Message.Chat.ID, path, update, bot)
 		bot.Send(msg)
 	}
 }
