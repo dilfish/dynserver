@@ -22,6 +22,7 @@ var FlagTestMode = flag.Bool("t", false, "test mode")
 var FlagV = flag.Bool("v", false, "print version info")
 var FlagT = flag.String("td", "", "telegram file folder")
 var FlagTB = flag.String("tb", "", "telegram base url")
+var FlagNToken = flag.Bool("nt", false, "using new telegram token")
 
 const MaxHTTPPayload = 1024 * 1024 * 30
 const TgToken = "1153923115:AAHUig2LQfApIF_Q-v5fn_fKgkCYhI15Flc"
@@ -32,7 +33,11 @@ func main() {
 	flag.Parse()
 
 	if *FlagT != "" {
-		go Telegram(*FlagT, TgToken)
+		if *FlagNToken {
+			go Telegram(*FlagT, TgFSToken)
+		} else {
+			go Telegram(*FlagT, TgToken)
+		}
 	}
 
 	if *FlagV {
