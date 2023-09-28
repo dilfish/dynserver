@@ -5,8 +5,10 @@ import (
 	"fmt"
 	dnet "github.com/dilfish/tools/net"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/exp/slog"
 	"log"
 	"net/http"
+	"os"
 	"runtime/debug"
 	"strings"
 	"time"
@@ -72,6 +74,7 @@ func main() {
 	var h HttpsHandler
 	h.C = client
 	h.u = dnet.NewUploadService(
+		slog.New(slog.NewTextHandler(os.Stdout)),
 		"https://"+domain+"/ugc/",
 		"/root/go/src/dynserver/ugc",
 		"https://"+domain+"/upload",
