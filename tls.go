@@ -96,8 +96,14 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("serve file:", r.RequestURI)
 	path := "/root/go/src/dynserver"
+    if r.Host == *FlagBlog {
+        path = "/root/go/src/dynserver/blogs"
+    }
 	if *FlagTestMode {
 		path = "/Users/dilfish/go/src/github.com/dilfish/dynserver"
+        if r.Host == *FlagBlog {
+            path = "/Users/dilfish/go/src/github.com/dilfish/dynserver/blogs"
+        }
 	}
 	d := http.Dir(path)
 	f, err := d.Open(r.RequestURI)
