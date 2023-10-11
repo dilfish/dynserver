@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	dnet "github.com/dilfish/tools/net"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"io"
@@ -8,10 +9,9 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"time"
-    "errors"
-    "os"
 )
 
 var SniList []string
@@ -98,22 +98,22 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("serve file:", r.RequestURI)
 	path := "/root/go/src/dynserver"
-    if r.Host == *FlagBlog {
-        path = "/root/go/src/dynserver/blogs"
-    }
+	if r.Host == *FlagBlog {
+		path = "/root/go/src/dynserver/blogs"
+	}
 	if *FlagTestMode {
 		path = "/Users/dilfish/go/src/github.com/dilfish/dynserver"
-        if r.Host == *FlagBlog {
-            path = "/Users/dilfish/go/src/github.com/dilfish/dynserver/blogs"
-        }
+		if r.Host == *FlagBlog {
+			path = "/Users/dilfish/go/src/github.com/dilfish/dynserver/blogs"
+		}
 	}
 	d := http.Dir(path)
 	f, err := d.Open(r.RequestURI)
 	if err != nil {
 		log.Println("open file error:", r.RequestURI, err)
-        if errors.Is(err, os.ErrNotExist) {
-            return
-        }
+		if errors.Is(err, os.ErrNotExist) {
+			return
+		}
 	} else {
 		fi, _ := f.Stat()
 		fileSizeServedBytes.Set(float64(fi.Size()))

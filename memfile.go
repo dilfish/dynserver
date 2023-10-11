@@ -63,5 +63,5 @@ func memFile(w http.ResponseWriter, r *http.Request, sizeStr string, ifSleep boo
 	if str != "" {
 		w.Write([]byte(str))
 	}
-    str = ""
+	str = ""
 }
