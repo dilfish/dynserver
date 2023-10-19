@@ -9,8 +9,8 @@ github.com/dilfish/telegram-bot-api-up v1.0.6 h1:JfVrNeUbXQQc+6upgoL+u+xzYXhmN+D
 github.com/dilfish/telegram-bot-api-up v1.0.6/go.mod h1:KoGdaOAr9+VhvOQA6Xj5h+LJsSMNx7v9UYx5rw+p1lI=
 github.com/dilfish/tools/io v1.0.15 h1:fBHzYK1G76YszDtqxt5hTBWeLnhfEya+Psz6aCbRmtA=
 github.com/dilfish/tools/io v1.0.15/go.mod h1:SpecDz637Xw0WhjmeL+MyTBkg07wFvVwYxO1+MWZyoI=
-github.com/dilfish/tools/net v1.0.28 h1:fW/yw+ySdQ7lEvKi3mbelBUh4vBNbQVTjoTI+mUxRL4=
-github.com/dilfish/tools/net v1.0.28/go.mod h1:QT42Vh5EMB74LniHfh6W5JJr+UMWlVMOpMQH2ZWpNwM=
+github.com/dilfish/tools/net v1.0.29 h1:J04QmfC9xJ4wopEPAu0eBH5EzOkrlcz+lmynVRQICoQ=
+github.com/dilfish/tools/net v1.0.29/go.mod h1:QT42Vh5EMB74LniHfh6W5JJr+UMWlVMOpMQH2ZWpNwM=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.5/go.mod h1:6O5/vntMXwX2lRkT1hjjk0nAC1IDOTvTlVgjlRvqsdk=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=
