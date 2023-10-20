@@ -77,7 +77,7 @@ func main() {
 	h.u = dnet.NewUploadService(
 		slog.New(slog.NewTextHandler(os.Stdout)),
 		"https://"+domain+"/ugc/",
-		"/root/go/src/dynserver/ugc",
+		"/root/www/ugc",
 		"https://"+domain+"/upload",
 		MaxHTTPPayload,
 		time.Hour*24*365*3, 5)

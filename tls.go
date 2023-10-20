@@ -97,9 +97,9 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("serve file:", r.RequestURI)
-	path := "/root/go/src/dynserver"
+	path := "/root/www"
 	if r.Host == *FlagBlog {
-		path = "/root/go/src/dynserver/blogs"
+		path = "/root/www/blogs"
 	}
 	if *FlagTestMode {
 		path = "/Users/dilfish/go/src/github.com/dilfish/dynserver"
