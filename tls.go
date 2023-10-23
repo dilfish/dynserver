@@ -31,6 +31,16 @@ func (h *HttpsHandler) Uploader(w http.ResponseWriter, r *http.Request) {
 
 func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
+	ConcurrentLock.Lock()
+	defer ConcurrentLock.Unlock()
+
+	if ConcurrentCount > MaxConcurrentCount {
+		time.Sleep(time.Second * 3)
+		return
+	}
+
+	ConcurrentCount = ConcurrentCount + 1
+	defer func() { ConcurrentCount = ConcurrentCount - 1 }()
 	defer func() {
 		elaps := time.Now().Sub(start)
 		us := elaps.Microseconds()
