@@ -84,6 +84,14 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.CreateMsg(w, r)
 		return
 	}
+	if strings.Index(r.RequestURI, "/jump/") == 0 {
+		Jump(w, r)
+		return
+	}
+	if strings.Index(r.RequestURI, "/status/") == 0 {
+		StatusCode(w, r)
+		return
+	}
 	if strings.Index(r.RequestURI, "/t/list/") == 0 {
 		h.MsgShow(w, r)
 		return
