@@ -10,7 +10,7 @@ var IP6C *IPv6Manager
 var IP4C *RangerMap
 
 func IPCheckInit(v4, v6 string) error {
-	IP4C := NewRangerMap()
+	IP4C = NewRangerMap()
 	err := IP4C.ReadFile(v4)
 	if err != nil {
 		log.Println("read file error:", err)
