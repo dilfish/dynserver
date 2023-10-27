@@ -45,7 +45,7 @@ func IsGoodIP(ipstr string) bool {
 	}
 	log.Println("view info:", ipstr, view)
 	// 城市-省份-大区-ISP-国家-大洲
-	if array[5] != "中国" {
+	if array[4] != "中国" {
 		return false
 	}
 	return true
