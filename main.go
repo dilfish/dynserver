@@ -71,6 +71,10 @@ func main() {
 	if client == nil {
 		panic("new mongo client error")
 	}
+	err = IPCheckInit("sorted.memip.txt", "sorted.memip.v6.txt")
+	if err != nil {
+		panic("init ip check error")
+	}
 
 	var h HttpsHandler
 	h.C = client
