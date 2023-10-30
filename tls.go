@@ -43,10 +43,13 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Println("split ip port error:", r.RemoteAddr, err)
 		return
 	}
-	good := IsGoodIP(ip)
-	if !good {
-		log.Println("bad ip:", ip)
-		return
+	log.Println("X-NO-CHECK-IP is:", r.Header.Get("X-No-Check-IP"))
+	if r.Header.Get("X-No-Check-IP") != "true" {
+		good := IsGoodIP(ip)
+		if !good {
+			log.Println("bad ip:", ip)
+			return
+		}
 	}
 	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
