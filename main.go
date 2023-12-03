@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"runtime/debug"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -26,6 +27,8 @@ var FlagT = flag.String("td", "", "telegram file folder")
 var FlagTB = flag.String("tb", "", "telegram base url")
 var FlagNToken = flag.Bool("nt", false, "using new telegram token")
 var FlagBlog = flag.String("b", "", "blog domain")
+var FlagBehindNginx = flag.Bool("bn", false, "behind nginx")
+var FlagBehindNginxPort = flag.Int("np", 10080, "behind nginx port")
 
 const MaxHTTPPayload = 1024 * 1024 * 30
 const TgToken = "1153923115:AAHUig2LQfApIF_Q-v5fn_fKgkCYhI15Flc"
@@ -85,6 +88,16 @@ func main() {
 		"https://"+domain+"/upload",
 		MaxHTTPPayload,
 		time.Hour*24*365*3, 5)
+
+	if *FlagBehindNginx {
+		log.Println("mode behind nginx, using:", *FlagBehindNginxPort)
+		err = http.ListenAndServe(":"+strconv.FormatInt(int64(*FlagBehindNginxPort), 10), &h)
+		if err != nil {
+			log.Println("liste error:", err)
+		}
+		return
+	}
+
 	go Redirect(&h)
 	prometheus.MustRegister(badDomainNameCounter)
 	prometheus.MustRegister(requestDurationUs)

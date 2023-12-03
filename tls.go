@@ -37,13 +37,12 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		requestDurationUs.Observe(float64(us))
 	}()
 	w.Header().Set("X-Server", "iPhone Xs")
-	log.Println("request is: ", r.Method, r.RemoteAddr, "->", r.Host, r.RequestURI)
+	log.Println("request is: ", r.Method, r.RemoteAddr, "->", r.Host, r.RequestURI, r.ContentLength)
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		log.Println("split ip port error:", r.RemoteAddr, err)
 		return
 	}
-	log.Println("X-NO-CHECK-IP is:", r.Header.Get("X-No-Check-IP"))
 	if r.Header.Get("X-No-Check-IP") != "true" {
 		good := IsGoodIP(ip)
 		if !good {
@@ -51,7 +50,6 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	log.Println("content length is:", r.ContentLength)
 	log.Println("header is: ", r.Header)
 	if r.ContentLength > MaxHTTPPayload {
 		log.Println("bad content length:", r.ContentLength)
