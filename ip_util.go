@@ -1,8 +1,9 @@
 package main
 
 import (
-	dnet "github.com/dilfish/tools/net"
 	"net"
+
+	dnet "github.com/dilfish/tools/net"
 )
 
 func IPv6ToUint64(ipstr string) (uint64, uint64) {

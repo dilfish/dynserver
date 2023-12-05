@@ -2,8 +2,6 @@ package main
 
 import (
 	"errors"
-	dnet "github.com/dilfish/tools/net"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"io"
 	"log"
 	"net"
@@ -12,6 +10,9 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	dnet "github.com/dilfish/tools/net"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var SniList []string

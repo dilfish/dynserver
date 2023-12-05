@@ -5,14 +5,15 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	tgbotapi "github.com/dilfish/telegram-bot-api-up"
-	dio "github.com/dilfish/tools/io"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
+
+	tgbotapi "github.com/dilfish/telegram-bot-api-up"
+	dio "github.com/dilfish/tools/io"
 )
 
 const Token = "1153923115:AAHUig2LQfApIF_Q-v5fn_fKgkCYhI15Flc"

@@ -3,9 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	dnet "github.com/dilfish/tools/net"
-	"github.com/prometheus/client_golang/prometheus"
-	"golang.org/x/exp/slog"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +10,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	dnet "github.com/dilfish/tools/net"
+	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/exp/slog"
 )
 
 var FlagCert = flag.String("cert", "dev.ug.pem", "cert file path")
@@ -91,7 +92,15 @@ func main() {
 
 	if *FlagBehindNginx {
 		log.Println("mode behind nginx, using:", *FlagBehindNginxPort)
-		err = http.ListenAndServe(":"+strconv.FormatInt(int64(*FlagBehindNginxPort), 10), &h)
+		s := &http.Server{
+			Addr:           ":" + strconv.FormatInt(int64(*FlagBehindNginxPort), 10),
+			Handler:        &h,
+			ReadTimeout:    3 * time.Second,
+			WriteTimeout:   3 * time.Second,
+			MaxHeaderBytes: 1024,
+			ConnState:      ConnState,
+		}
+		err = s.ListenAndServe()
 		if err != nil {
 			log.Println("liste error:", err)
 		}
@@ -106,7 +115,15 @@ func main() {
 	if *FlagTestMode {
 		addr = ":11443"
 	}
-	err = http.ListenAndServeTLS(addr, *FlagCert, *FlagKey, &h)
+	s := &http.Server{
+		Addr:           addr,
+		Handler:        &h,
+		ReadTimeout:    3 * time.Second,
+		WriteTimeout:   3 * time.Second,
+		MaxHeaderBytes: 1024,
+		ConnState:      ConnState,
+	}
+	err = s.ListenAndServeTLS(*FlagCert, *FlagKey)
 	if err != nil {
 		log.Println("listen and serve tls error:", err)
 	}

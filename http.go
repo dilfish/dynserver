@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"time"
 )
 
 type RedirectHandler struct {
@@ -28,7 +29,15 @@ func Redirect(h http.Handler) {
 	if *FlagTestMode {
 		addr = ":11080"
 	}
-	err := http.ListenAndServe(addr, &rd)
+	s := &http.Server{
+		Addr:           addr,
+		Handler:        &rd,
+		ReadTimeout:    3 * time.Second,
+		WriteTimeout:   3 * time.Second,
+		MaxHeaderBytes: 1024,
+		ConnState:      ConnState,
+	}
+	err := s.ListenAndServe()
 	if err != nil {
 		panic("listen and serve http error: " + err.Error())
 	}

@@ -2,11 +2,12 @@ package main
 
 import (
 	"errors"
-	dio "github.com/dilfish/tools/io"
 	"log"
 	"sort"
 	"strconv"
 	"strings"
+
+	dio "github.com/dilfish/tools/io"
 )
 
 // BlockSize 使用 65536
