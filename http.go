@@ -34,7 +34,7 @@ func Redirect(h http.Handler) {
 		Handler:        &rd,
 		ReadTimeout:    3 * time.Second,
 		WriteTimeout:   3 * time.Second,
-		MaxHeaderBytes: 1024,
+		MaxHeaderBytes: 2048,
 		ConnState:      ConnState,
 	}
 	err := s.ListenAndServe()

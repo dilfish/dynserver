@@ -97,7 +97,7 @@ func main() {
 			Handler:        &h,
 			ReadTimeout:    3 * time.Second,
 			WriteTimeout:   3 * time.Second,
-			MaxHeaderBytes: 1024,
+			MaxHeaderBytes: 2048,
 			ConnState:      ConnState,
 		}
 		err = s.ListenAndServe()
@@ -120,7 +120,7 @@ func main() {
 		Handler:        &h,
 		ReadTimeout:    3 * time.Second,
 		WriteTimeout:   3 * time.Second,
-		MaxHeaderBytes: 1024,
+		MaxHeaderBytes: 2048,
 		ConnState:      ConnState,
 	}
 	err = s.ListenAndServeTLS(*FlagCert, *FlagKey)
