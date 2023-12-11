@@ -23,7 +23,7 @@ var MessagePage = `
   <div class="column is-full">
 <article class="message">
   <div class="message-body">
-      你可以输入任意内容
+      你可以输入任意内容，也可以从 curl 提交：curl -X POST -d 'message=测试从curl提交' https://dev.ug/t
   </div>
 </article>
   </div>
