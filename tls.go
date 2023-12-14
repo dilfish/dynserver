@@ -51,7 +51,7 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	log.Println("header is: ", r.Header)
+	log.Println("header is: ", r.RemoteAddr, r.Header)
 	if r.ContentLength > MaxHTTPPayload {
 		log.Println("bad content length:", r.ContentLength)
 		return

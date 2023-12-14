@@ -43,7 +43,7 @@ func CFIPHandler(w http.ResponseWriter, r *http.Request) {
 	ii.Value = r.RemoteAddr
 	kvList = append([]IPInfo{ii}, kvList...)
 	ii.Key = "X-time"
-	ii.Value = time.Now().String()
+	ii.Value = time.Now().Format("2006-01-02T15:04:05.99999999 -07:00:00")
 	kvList = append([]IPInfo{ii}, kvList...)
 
 	if r.Method != "GET" {
