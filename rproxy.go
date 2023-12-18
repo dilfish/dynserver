@@ -44,6 +44,9 @@ func ParseProxy() error {
 
 func GetProxyPort(d string) *httputil.ReverseProxy {
 	log.Println("get proxy:", d, ProxyDomainList)
+    if *FlagBehindNginx {
+        return nil
+    }
 	for idx, p := range ProxyDomainList {
 		if d == p {
 			log.Println("proxy to:", p, ProxyPortList[idx])

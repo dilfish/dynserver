@@ -138,6 +138,9 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func IsGoodSNI(host string) bool {
+    if *FlagBehindNginx {
+        return true
+    }
 	h, _, err := net.SplitHostPort(host)
 	if err == nil {
 		host = h
