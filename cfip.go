@@ -41,6 +41,9 @@ func CFIPHandler(w http.ResponseWriter, r *http.Request) {
 	kvList = append([]IPInfo{ii}, kvList...)
 	ii.Key = "X-Remote-IP"
 	ii.Value = r.RemoteAddr
+    if *FlagBehindNginx {
+        ii.Value = r.Header.Get("X-Real-Ip")
+    }
 	kvList = append([]IPInfo{ii}, kvList...)
 	ii.Key = "X-time"
 	ii.Value = time.Now().Format("2006-01-02T15:04:05.99999999 -07:00:00")
