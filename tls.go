@@ -43,7 +43,7 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Header.Get("X-No-Check-IP") != "true" {
-		good := IsGoodIP(ip)
+		good := IsGoodIP(ip, r.Header)
 		if !good {
 			log.Println("bad ip:", ip)
 			return

@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net"
+    "net/http"
 	"strings"
 )
 
@@ -25,15 +26,15 @@ func IPCheckInit(v4, v6 string) error {
 	return nil
 }
 
-func IsGoodIP(ipstr string) bool {
-	ip := net.ParseIP(ipstr)
+func IsGoodIP(ipstr string, header http.Header) bool {
+    if *FlagBehindNginx {
+        ipstr = header.Get("X-Real-Ip")
+    }
+    ip := net.ParseIP(ipstr)
 	if ip == nil {
 		log.Println("bad ip:", ipstr)
 		return false
 	}
-    if ipstr == "127.0.0.1" {
-        return true
-    }
 	var view string
 	// ipv6
 	if ip.To4() == nil {
