@@ -131,9 +131,6 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	f, err := d.Open(r.RequestURI)
 	if err != nil {
 		log.Println("open file error:", r.RequestURI, err)
-		if errors.Is(err, os.ErrNotExist) {
-			return
-		}
 	} else {
 		fi, _ := f.Stat()
 		fileSizeServedBytes.Set(float64(fi.Size()))
