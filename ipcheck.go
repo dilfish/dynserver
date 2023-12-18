@@ -31,6 +31,9 @@ func IsGoodIP(ipstr string) bool {
 		log.Println("bad ip:", ipstr)
 		return false
 	}
+    if ipstr == "127.0.0.1" {
+        return true
+    }
 	var view string
 	// ipv6
 	if ip.To4() == nil {
