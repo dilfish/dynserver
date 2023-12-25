@@ -30,6 +30,7 @@ var FlagNToken = flag.Bool("nt", false, "using new telegram token")
 var FlagBlog = flag.String("b", "", "blog domain")
 var FlagBehindNginx = flag.Bool("bn", false, "behind nginx")
 var FlagBehindNginxPort = flag.Int("np", 10080, "behind nginx port")
+var FlagJumpIPCheck = flag.Bool("jic", false, "jump ip check")
 
 const MaxHTTPPayload = 1024 * 1024 * 30
 const TgToken = "1153923115:AAHUig2LQfApIF_Q-v5fn_fKgkCYhI15Flc"

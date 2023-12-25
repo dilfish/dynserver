@@ -48,6 +48,9 @@ func IsGoodIP(ipstr string, header http.Header) bool {
 		return false
 	}
 	log.Println("view info:", ipstr, view)
+    if *FlagJumpIPCheck {
+        return true
+    }
 	// 城市-省份-大区-ISP-国家-大洲
 	if array[4] != "中国" {
 		return false
