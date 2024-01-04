@@ -110,6 +110,10 @@ func (h *HttpsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		CFIPHandler(w, r)
 		return
 	}
+    if r.RequestURI == "/vnstat" {
+        VnstatHandler(w, r)
+        return
+    }
 	if r.RequestURI == "/metrics" {
 		promhttp.Handler().ServeHTTP(w, r)
 		return

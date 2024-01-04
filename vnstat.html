@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#0B4B59"/>
+
+    <title> 🐍Traffic Info</title>
+
+    <link href="https://san.dev.ug/302/bootstrap.css" rel="stylesheet">
+    <style>
+h1 {
+     word-wrap:break-word;
+ }
+</style>
+  </head>
+
+  <body>
+
+           {{ range .InfoList}}
+  <main role="main" class="container">
+    <div class="jumbotron">
+        <h1>
+			{{ .Value }}
+	</h1>
+        <p class="lead">{{.Key }}</p>
+    </div>
+  </main>
+  {{ end }}
+
+
+{{ range .TrafficList }}
+<h1 align="center">{{ .Name }}</h1>
+<div class="container">
+            <table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Time</th>
+      <th scope="col">Receive</th>
+      <th scope="col">Send</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{ range .Traffic }}
+    <tr>
+        <th scope="row">{{ .Time }}</th>
+        <th scope="row">{{ .Rx }} </th>
+        <th scope="row">{{ .Tx }} </th>
+    </tr>
+    {{ end }}
+     </tbody>
+</table>
+</div>
+{{ end }}
+
+   <script src="https://san.dev.ug/302/jquery.js"></script>
+   <script src="https://san.dev.ug/302/bootstrap.js"></script>
+  </body>
+</html>
