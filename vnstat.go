@@ -6,9 +6,9 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
-	"net/http"
 )
 
 type VnstatDate struct {
@@ -227,13 +227,13 @@ func PrintVnstat(v *Vnstat) PageStruct {
 		traffic.Name = "traffic of top of " + name
 		// 最近3个 top
 		if len(intf.Traffic.Top) > 3 {
-			intf.Traffic.Top = intf.Traffic.Top[len(intf.Traffic.Top)-3:]
+			intf.Traffic.Top = intf.Traffic.Top[:3]
 		}
-		for i := len(intf.Traffic.Top) - 1; i >= 0; i-- {
+		for _, top := range intf.Traffic.Top {
 			traffic.Traffic = append(traffic.Traffic, PageTrafficInfo{
-				Time: DateString(&intf.Traffic.Top[i].Date),
-				Rx:   TrafficString(intf.Traffic.Top[i].Rx),
-				Tx:   TrafficString(intf.Traffic.Top[i].Tx),
+				Time: DateString(&top.Date),
+				Rx:   TrafficString(top.Rx),
+				Tx:   TrafficString(top.Tx),
 			})
 		}
 		ps.TrafficList = append(ps.TrafficList, traffic)
@@ -270,6 +270,6 @@ func VnstatHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.Execute(w, data)
 	if err != nil {
-		log.Println("execute error:",err)
+		log.Println("execute error:", err)
 	}
 }
